@@ -33,7 +33,12 @@ int insertIntoAvlTreeNode(AvlTreeNode *this,  avlContent_t value) {
 
     if (value < this->value) {
         if (this->left) {
-            return insertIntoAvlTreeNode(this->left, value);
+            int result = insertIntoAvlTreeNode(this->left, value);
+            if (result) {
+                return result;
+            }
+            updateHeigthOfAvlTreeNode(this);
+            return 0;
         }
 
         AvlTreeNode *newNode = newAvlTreeNode(value);
@@ -45,7 +50,13 @@ int insertIntoAvlTreeNode(AvlTreeNode *this,  avlContent_t value) {
     }
     else {
         if (this->right) {
-            return insertIntoAvlTreeNode(this->right, value);
+            // TODO: remove duplicated code
+            int result = insertIntoAvlTreeNode(this->right, value);
+            if (result) {
+                return result;
+            }
+            updateHeigthOfAvlTreeNode(this);
+            return 0;
         }
 
         AvlTreeNode *newNode = newAvlTreeNode(value);
@@ -57,7 +68,6 @@ int insertIntoAvlTreeNode(AvlTreeNode *this,  avlContent_t value) {
     }
 
     // TODO: restore balance
-    // TODO: recalculate heigths
     return 0;
 }
 
@@ -67,6 +77,22 @@ int heigthOfAvlTreeNode(AvlTreeNode *this) {
     }
 
     return this->heigth;
+}
+
+void updateHeigthOfAvlTreeNode(AvlTreeNode *this) {
+    if (!this) {
+        return;
+    }
+
+    int leftHeigth = heigthOfAvlTreeNode(this->left);
+    int rightHeigth = heigthOfAvlTreeNode(this->right);
+
+    if (leftHeigth > rightHeigth) {
+        this->heigth = leftHeigth + 1;
+    }
+    else {
+        this->heigth = rightHeigth + 1;
+    }
 }
 
 int findInAvlTreeNode(AvlTreeNode *this, avlContent_t value) {
