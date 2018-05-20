@@ -8,7 +8,7 @@ typedef int avlContent_t;
 #endif
 
 typedef struct AvlTreeNode {
-    int heigth;
+    int height;
     avlContent_t value;
     struct AvlTreeNode *left;
     struct AvlTreeNode *right;
@@ -21,11 +21,11 @@ void deleteAvlTreeNode(AvlTreeNode *this);
 /// @return 0 on success, error code otherwise
 int insertIntoAvlTreeNode(AvlTreeNode *this, avlContent_t value);
 
-int heigthOfAvlTreeNode(AvlTreeNode *this);
+int heightOfAvlTreeNode(AvlTreeNode *this);
 
 void updateAvlTreeNode(AvlTreeNode *this, AvlTreeNode *insertationPlace);
 
-void updateHeigthOfAvlTreeNode(AvlTreeNode *this);
+void updateHeightOfAvlTreeNode(AvlTreeNode *this);
 
 void restoreBalacneOfAvlTreeNode(AvlTreeNode *this, AvlTreeNode *insertationPlace);
 

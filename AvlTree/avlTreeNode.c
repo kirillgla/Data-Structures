@@ -11,7 +11,7 @@ AvlTreeNode *newAvlTreeNode(avlContent_t value) {
 
     result->left = NULL;
     result->right = NULL;
-    result->heigth = 1;
+    result->height = 1;
     result->value = value;
     return result;
 }
@@ -51,32 +51,32 @@ int insertIntoAvlTreeNode(AvlTreeNode *this,  avlContent_t value) {
     return 0;
 }
 
-int heigthOfAvlTreeNode(AvlTreeNode *this) {
+int heightOfAvlTreeNode(AvlTreeNode *this) {
     if (!this) {
         return 0;
     }
 
-    return this->heigth;
+    return this->height;
 }
 
 void updateAvlTreeNode(AvlTreeNode *this, AvlTreeNode *insertationPlace) {
-    updateHeigthOfAvlTreeNode(this);
+    updateHeightOfAvlTreeNode(this);
     restoreBalacneOfAvlTreeNode(this, insertationPlace);
 }
 
-void updateHeigthOfAvlTreeNode(AvlTreeNode *this) {
+void updateHeightOfAvlTreeNode(AvlTreeNode *this) {
     if (!this) {
         return;
     }
 
-    int leftHeigth = heigthOfAvlTreeNode(this->left);
-    int rightHeigth = heigthOfAvlTreeNode(this->right);
+    int leftHeight = heightOfAvlTreeNode(this->left);
+    int rightHeight = heightOfAvlTreeNode(this->right);
 
-    if (leftHeigth > rightHeigth) {
-        this->heigth = leftHeigth + 1;
+    if (leftHeight > rightHeight) {
+        this->height = leftHeight + 1;
     }
     else {
-        this->heigth = rightHeigth + 1;
+        this->height = rightHeight + 1;
     }
 }
 

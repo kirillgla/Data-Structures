@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
 
     result = findInAvlTree(tree, 30);
     printf("30 %sfound\r\n", result ? "" : "not ");
-    printf("AVL tree has heigth of %d\r\n", heigthOfAvlTree(tree));
+    printf("AVL tree has heigth of %d\r\n", heightOfAvlTree(tree));
 
     deleteAvlTree(tree);
 }
