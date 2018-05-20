@@ -26,7 +26,7 @@ void deleteAvlTreeNode(AvlTreeNode *this) {
     free(this);
 }
 
-int insertIntoAvlTreeNode(AvlTreeNode *this,  avlContent_t value) {
+int insertIntoAvlTreeNode(AvlTreeNode *this, avlContent_t value) {
     if (!this) {
         return 1;
     }
@@ -59,9 +59,17 @@ int heightOfAvlTreeNode(AvlTreeNode *this) {
     return this->height;
 }
 
+int deltaOfAvlTreeNode(AvlTreeNode *this) {
+    if (!this) {
+        return 0;
+    }
+
+    return heightOfAvlTreeNode(this->right) - heightOfAvlTreeNode(this->left);
+}
+
 void updateAvlTreeNode(AvlTreeNode *this) {
-    updateHeightOfAvlTreeNode(this);
     restoreBalacneOfAvlTreeNode(this);
+    updateHeightOfAvlTreeNode(this);
 }
 
 void updateHeightOfAvlTreeNode(AvlTreeNode *this) {
@@ -81,15 +89,72 @@ void updateHeightOfAvlTreeNode(AvlTreeNode *this) {
 }
 
 void restoreBalacneOfAvlTreeNode(AvlTreeNode *this) {
-    // TODO
+    if (!this) {
+        return;
+    }
+
+    int delta = deltaOfAvlTreeNode(this);
+    
+    if (delta > -2 && delta < 2) {
+        return;
+    }
+
+    // The child that was modified
+    AvlTreeNode *child = delta < 0 ? this->left : this->right;
+    int childDelta = deltaOfAvlTreeNode(child);
+
+    if (delta > 0) {
+        if (childDelta > 0) {
+            rotateLeftAvlTreeNode(this);
+        }
+        else {
+            // childDelta < 0
+            rotateRightAvlTreeNode(child);
+            rotateLeftAvlTreeNode(this);
+        }
+    }
+    else {
+        // delta < 0
+        if (childDelta < 0) {
+            rotateRightAvlTreeNode(this);
+        }
+        else {
+            rotateLeftAvlTreeNode(child);
+            rotateRightAvlTreeNode(this);
+        }
+    }
 }
 
 void rotateLeftAvlTreeNode(AvlTreeNode *this) {
-    // TODO
+    if (!this || !this->right) {
+        return;
+    }
+
+    AvlTreeNode *rootAddress = this;
+    AvlTreeNode *childAddress = this->right;
+    AvlTreeNode formerRoot = *rootAddress;
+    AvlTreeNode formerChild = *childAddress;
+
+    *rootAddress = formerChild;
+    *childAddress = formerRoot;
+    childAddress->right = rootAddress->left;
+    rootAddress->left = childAddress;
 }
 
 void rotateRightAvlTreeNode(AvlTreeNode *this) {
-    // TODO
+    if (!this || !this-> left) {
+        return;
+    }
+
+    AvlTreeNode *rootAddress = this;
+    AvlTreeNode *childAddress = this->left;
+    AvlTreeNode formerRoot = *rootAddress;
+    AvlTreeNode formerChild = *childAddress;
+
+    *rootAddress = formerChild;
+    *childAddress = formerRoot;
+    childAddress->left = rootAddress->right;
+    rootAddress->right = childAddress;
 }
 
 int findInAvlTreeNode(AvlTreeNode *this, avlContent_t value) {

@@ -23,6 +23,8 @@ int insertIntoAvlTreeNode(AvlTreeNode *this, avlContent_t value);
 
 int heightOfAvlTreeNode(AvlTreeNode *this);
 
+int deltaOfAvlTreeNode(AvlTreeNode *this);
+
 void updateAvlTreeNode(AvlTreeNode *this);
 
 void updateHeightOfAvlTreeNode(AvlTreeNode *this);
