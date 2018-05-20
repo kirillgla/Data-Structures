@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
 
     tree = newAvlTree();
 
-    for (int i = 12; i < 17; i++) {
+    for (int i = 0; i < 100; i++) {
         result = insertIntoAvlTree(tree, i);
         if (result) {
             printf("Error %d\n", result);
@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    for (int i = 12; i < 17; i++) {
+    for (int i = 0; i < 100; i++) {
         result = findInAvlTree(tree, i);
         if (!result) {
             printf("Error: %d not fonund", i);

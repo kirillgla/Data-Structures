@@ -123,6 +123,8 @@ void restoreBalacneOfAvlTreeNode(AvlTreeNode *this) {
             rotateRightAvlTreeNode(this);
         }
     }
+    updateHeightOfAvlTreeNode(child);
+    updateHeightOfAvlTreeNode(this);
 }
 
 void rotateLeftAvlTreeNode(AvlTreeNode *this) {
