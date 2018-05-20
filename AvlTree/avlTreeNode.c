@@ -37,7 +37,7 @@ int insertIntoAvlTreeNode(AvlTreeNode *this,  avlContent_t value) {
         if (result) {
             return result;
         }
-        updateAvlTreeNode(this, *insertationPlace);
+        updateAvlTreeNode(this);
         return 0;
     }
 
@@ -47,7 +47,7 @@ int insertIntoAvlTreeNode(AvlTreeNode *this,  avlContent_t value) {
     }
 
     *insertationPlace = newNode;
-    updateAvlTreeNode(this, *insertationPlace);
+    updateAvlTreeNode(this);
     return 0;
 }
 
@@ -59,9 +59,9 @@ int heightOfAvlTreeNode(AvlTreeNode *this) {
     return this->height;
 }
 
-void updateAvlTreeNode(AvlTreeNode *this, AvlTreeNode *insertationPlace) {
+void updateAvlTreeNode(AvlTreeNode *this) {
     updateHeightOfAvlTreeNode(this);
-    restoreBalacneOfAvlTreeNode(this, insertationPlace);
+    restoreBalacneOfAvlTreeNode(this);
 }
 
 void updateHeightOfAvlTreeNode(AvlTreeNode *this) {
@@ -80,7 +80,15 @@ void updateHeightOfAvlTreeNode(AvlTreeNode *this) {
     }
 }
 
-void restoreBalacneOfAvlTreeNode(AvlTreeNode *this, AvlTreeNode *insertationPlace) {
+void restoreBalacneOfAvlTreeNode(AvlTreeNode *this) {
+    // TODO
+}
+
+void rotateLeftAvlTreeNode(AvlTreeNode *this) {
+    // TODO
+}
+
+void rotateRightAvlTreeNode(AvlTreeNode *this) {
     // TODO
 }
 
