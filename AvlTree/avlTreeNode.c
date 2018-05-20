@@ -69,6 +69,7 @@ int deltaOfAvlTreeNode(AvlTreeNode *this) {
 
 void updateAvlTreeNode(AvlTreeNode *this) {
     restoreBalacneOfAvlTreeNode(this);
+    // TODO: this recalculation might be redundant
     updateHeightOfAvlTreeNode(this);
 }
 
@@ -123,8 +124,6 @@ void restoreBalacneOfAvlTreeNode(AvlTreeNode *this) {
             rotateRightAvlTreeNode(this);
         }
     }
-    updateHeightOfAvlTreeNode(child);
-    updateHeightOfAvlTreeNode(this);
 }
 
 void rotateLeftAvlTreeNode(AvlTreeNode *this) {
@@ -141,6 +140,9 @@ void rotateLeftAvlTreeNode(AvlTreeNode *this) {
     *childAddress = formerRoot;
     childAddress->right = rootAddress->left;
     rootAddress->left = childAddress;
+
+    updateHeightOfAvlTreeNode(childAddress);
+    updateHeightOfAvlTreeNode(rootAddress);
 }
 
 void rotateRightAvlTreeNode(AvlTreeNode *this) {
@@ -157,6 +159,9 @@ void rotateRightAvlTreeNode(AvlTreeNode *this) {
     *childAddress = formerRoot;
     childAddress->left = rootAddress->right;
     rootAddress->right = childAddress;
+
+    updateHeightOfAvlTreeNode(childAddress);
+    updateHeightOfAvlTreeNode(rootAddress);
 }
 
 int findInAvlTreeNode(AvlTreeNode *this, avlContent_t value) {
