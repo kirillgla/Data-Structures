@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
     for (int i = 12; i < 33; i++) {
         result = insertIntoAvlTree(tree, i);
         if (result) {
-            printf("Error %d", result);
+            printf("Error %d\n", result);
             deleteAvlTree(tree);
             return result;
         }
@@ -27,8 +27,9 @@ int main(int argc, char **argv) {
 
     result = findInAvlTree(tree, 30);
     if (result) {
-        printf("ok");
+        printf("found 30\n");
     }
+    printf("AVL tree has heigth of %d\n", heigthOfAvlTree(tree));
 
     deleteAvlTree(tree);
 }

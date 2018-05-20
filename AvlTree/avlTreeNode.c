@@ -57,7 +57,16 @@ int insertIntoAvlTreeNode(AvlTreeNode *this,  avlContent_t value) {
     }
 
     // TODO: restore balance
+    // TODO: recalculate heigths
     return 0;
+}
+
+int heigthOfAvlTreeNode(AvlTreeNode *this) {
+    if (!this) {
+        return 0;
+    }
+
+    return this->heigth;
 }
 
 int findInAvlTreeNode(AvlTreeNode *this, avlContent_t value) {

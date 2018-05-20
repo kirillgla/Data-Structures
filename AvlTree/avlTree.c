@@ -39,6 +39,14 @@ int insertIntoAvlTree(AvlTree *this, avlContent_t value) {
     return 0;
 }
 
+int heigthOfAvlTree(AvlTree *this) {
+    if (!this) {
+        return 0;
+    }
+
+    return heigthOfAvlTreeNode(this->root);
+}
+
 int findInAvlTree(AvlTree *this, avlContent_t value) {
     if (!this) {
         return 0;

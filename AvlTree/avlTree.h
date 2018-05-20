@@ -14,6 +14,8 @@ void deleteAvlTree(AvlTree *this);
 /// @return 0 on success, error code otherwise
 int insertIntoAvlTree(AvlTree *this, avlContent_t value);
 
+int heigthOfAvlTree(AvlTree *this);
+
 /// @return whether this contains value or not
 int findInAvlTree(AvlTree *this, avlContent_t value);
 
