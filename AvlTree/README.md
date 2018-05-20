@@ -1,5 +1,4 @@
 This is implementation of AVL binary tree
-(unfinished)
 
 Error codes:
   * -2 : unpredicted internal error

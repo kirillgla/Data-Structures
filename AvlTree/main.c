@@ -15,19 +15,19 @@ int main(int argc, char **argv) {
 
     tree = newAvlTree();
 
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 1000; i++) {
         result = insertIntoAvlTree(tree, i);
         if (result) {
-            printf("Error %d\n", result);
+            printf("Error %d\r\n", result);
             deleteAvlTree(tree);
             return result;
         }
     }
 
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 1000; i++) {
         result = findInAvlTree(tree, i);
         if (!result) {
-            printf("Error: %d not fonund", i);
+            printf("Error: %d not fonund\r\n", i);
             deleteAvlTree(tree);
             return result;
         }
