@@ -23,7 +23,11 @@ int insertIntoAvlTreeNode(AvlTreeNode *this, avlContent_t value);
 
 int heigthOfAvlTreeNode(AvlTreeNode *this);
 
+void updateAvlTreeNode(AvlTreeNode *this, AvlTreeNode *insertationPlace);
+
 void updateHeigthOfAvlTreeNode(AvlTreeNode *this);
+
+void restoreBalacneOfAvlTreeNode(AvlTreeNode *this, AvlTreeNode *insertationPlace);
 
 /// @return whether given subtree contains value or not
 int findInAvlTreeNode(AvlTreeNode *this, avlContent_t value);

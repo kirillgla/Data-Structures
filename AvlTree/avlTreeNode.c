@@ -31,43 +31,23 @@ int insertIntoAvlTreeNode(AvlTreeNode *this,  avlContent_t value) {
         return 1;
     }
 
-    if (value < this->value) {
-        if (this->left) {
-            int result = insertIntoAvlTreeNode(this->left, value);
-            if (result) {
-                return result;
-            }
-            updateHeigthOfAvlTreeNode(this);
-            return 0;
+    AvlTreeNode **insertationPlace = value < this->value ? &(this->left) : &(this->right);
+    if (*insertationPlace) {
+        int result = insertIntoAvlTreeNode(*insertationPlace, value);
+        if (result) {
+            return result;
         }
-
-        AvlTreeNode *newNode = newAvlTreeNode(value);
-        if (!newNode) {
-            return 2;
-        }
-
-        this->left = newNode;
-    }
-    else {
-        if (this->right) {
-            // TODO: remove duplicated code
-            int result = insertIntoAvlTreeNode(this->right, value);
-            if (result) {
-                return result;
-            }
-            updateHeigthOfAvlTreeNode(this);
-            return 0;
-        }
-
-        AvlTreeNode *newNode = newAvlTreeNode(value);
-        if (!newNode) {
-            return 2;
-        }
-
-        this->right = newNode;
+        updateAvlTreeNode(this, *insertationPlace);
+        return 0;
     }
 
-    // TODO: restore balance
+    AvlTreeNode *newNode = newAvlTreeNode(value);
+    if (!newNode) {
+        return 2;
+    }
+
+    *insertationPlace = newNode;
+    updateAvlTreeNode(this, *insertationPlace);
     return 0;
 }
 
@@ -77,6 +57,11 @@ int heigthOfAvlTreeNode(AvlTreeNode *this) {
     }
 
     return this->heigth;
+}
+
+void updateAvlTreeNode(AvlTreeNode *this, AvlTreeNode *insertationPlace) {
+    updateHeigthOfAvlTreeNode(this);
+    restoreBalacneOfAvlTreeNode(this, insertationPlace);
 }
 
 void updateHeigthOfAvlTreeNode(AvlTreeNode *this) {
@@ -93,6 +78,10 @@ void updateHeigthOfAvlTreeNode(AvlTreeNode *this) {
     else {
         this->heigth = rightHeigth + 1;
     }
+}
+
+void restoreBalacneOfAvlTreeNode(AvlTreeNode *this, AvlTreeNode *insertationPlace) {
+    // TODO
 }
 
 int findInAvlTreeNode(AvlTreeNode *this, avlContent_t value) {

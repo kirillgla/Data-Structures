@@ -3,7 +3,7 @@
 #endif
 
 #define AVL_CONTENT_T
-typedef double avlContent_t;
+typedef int avlContent_t;
 
 
 #include <stdio.h>
@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
 
     tree = newAvlTree();
 
-    for (int i = 12; i < 33; i++) {
+    for (int i = 12; i < 17; i++) {
         result = insertIntoAvlTree(tree, i);
         if (result) {
             printf("Error %d\n", result);
@@ -26,10 +26,8 @@ int main(int argc, char **argv) {
     }
 
     result = findInAvlTree(tree, 30);
-    if (result) {
-        printf("found 30\n");
-    }
-    printf("AVL tree has heigth of %d\n", heigthOfAvlTree(tree));
+    printf("30 %sfound\r\n", result ? "" : "not ");
+    printf("AVL tree has heigth of %d\r\n", heigthOfAvlTree(tree));
 
     deleteAvlTree(tree);
 }
