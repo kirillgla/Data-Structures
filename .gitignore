@@ -1,3 +1,5 @@
 /*/*.exe
 /*/*.o
 /*/*/i
+/*/.idea/
+/*/cmake-build-debug/
