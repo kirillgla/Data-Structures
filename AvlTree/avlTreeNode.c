@@ -37,7 +37,7 @@ int insertIntoAvlTreeNode(AvlTreeNode *this, avlContent_t value) {
         if (result) {
             return result;
         }
-        updateAvlTreeNode(this);
+        restoreBalacneOfAvlTreeNode(this);
         return 0;
     }
 
@@ -47,7 +47,7 @@ int insertIntoAvlTreeNode(AvlTreeNode *this, avlContent_t value) {
     }
 
     *insertationPlace = newNode;
-    updateAvlTreeNode(this);
+    restoreBalacneOfAvlTreeNode(this);
     return 0;
 }
 
@@ -65,12 +65,6 @@ int deltaOfAvlTreeNode(AvlTreeNode *this) {
     }
 
     return heightOfAvlTreeNode(this->right) - heightOfAvlTreeNode(this->left);
-}
-
-void updateAvlTreeNode(AvlTreeNode *this) {
-    restoreBalacneOfAvlTreeNode(this);
-    // TODO: this recalculation might be redundant
-    updateHeightOfAvlTreeNode(this);
 }
 
 void updateHeightOfAvlTreeNode(AvlTreeNode *this) {
@@ -97,6 +91,7 @@ void restoreBalacneOfAvlTreeNode(AvlTreeNode *this) {
     int delta = deltaOfAvlTreeNode(this);
     
     if (delta > -2 && delta < 2) {
+        updateHeightOfAvlTreeNode(this);
         return;
     }
 
