@@ -27,12 +27,12 @@ int main(int argc, char **argv) {
     for (int i = 0; i < 1000; i++) {
         result = findInAvlTree(tree, i);
         if (!result) {
-            printf("Error: %d not fonund\r\n", i);
+            printf("Error: %d not found\r\n", i);
             deleteAvlTree(tree);
             return result;
         }
     }
 
-    printf("AVL tree has heigth of %d\r\n", heightOfAvlTree(tree));
+    printf("AVL tree has height of %d\r\n", heightOfAvlTree(tree));
     deleteAvlTree(tree);
 }

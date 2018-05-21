@@ -27,7 +27,7 @@ int deltaOfAvlTreeNode(AvlTreeNode *this);
 
 void updateHeightOfAvlTreeNode(AvlTreeNode *this);
 
-void restoreBalacneOfAvlTreeNode(AvlTreeNode *this);
+void restoreBalanceOfAvlTreeNode(AvlTreeNode *this);
 
 void rotateLeftAvlTreeNode(AvlTreeNode *this);
 
