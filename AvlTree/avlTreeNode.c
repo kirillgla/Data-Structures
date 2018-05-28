@@ -26,14 +26,14 @@ void deleteAvlTreeNode(AvlTreeNode *this) {
     free(this);
 }
 
-int insertIntoAvlTreeNode(AvlTreeNode *this, avlContent_t value) {
-    if (!this) {
+int insertIntoAvlTreeNode(AvlTreeNode *this, avlContent_t value, avlComparator_t comparator) {
+    if (!this || !comparator) {
         return 1;
     }
 
-    AvlTreeNode **insertionPlace = value < this->value ? &(this->left) : &(this->right);
+    AvlTreeNode **insertionPlace = comparator(value, this->value) < 0 ? &(this->left) : &(this->right);
     if (*insertionPlace) {
-        int result = insertIntoAvlTreeNode(*insertionPlace, value);
+        int result = insertIntoAvlTreeNode(*insertionPlace, value, comparator);
         if (result) {
             return result;
         }
@@ -89,7 +89,7 @@ void restoreBalanceOfAvlTreeNode(AvlTreeNode *this) {
     }
 
     int delta = deltaOfAvlTreeNode(this);
-    
+
     if (delta > -2 && delta < 2) {
         updateHeightOfAvlTreeNode(this);
         return;
@@ -159,19 +159,19 @@ void rotateRightAvlTreeNode(AvlTreeNode *this) {
     updateHeightOfAvlTreeNode(rootAddress);
 }
 
-int findInAvlTreeNode(AvlTreeNode *this, avlContent_t value) {
+int findInAvlTreeNode(AvlTreeNode *this, avlContent_t value, avlComparator_t comparator) {
     if (!this) {
         return 0;
     }
 
-    if (value == this->value) {
+    if (!comparator(value, this->value)) {
         return 1;
     }
 
-    if (value < this->value) {
-        return findInAvlTreeNode(this->left, value);
+    if (comparator(value, this->value) < 0) {
+        return findInAvlTreeNode(this->left, value, comparator);
     }
     else {
-        return findInAvlTreeNode(this->right, value);
+        return findInAvlTreeNode(this->right, value, comparator);
     }
 }

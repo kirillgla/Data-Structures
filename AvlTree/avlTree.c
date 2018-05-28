@@ -3,13 +3,18 @@
 
 #include "avlTree.h"
 
-AvlTree *newAvlTree() {
+AvlTree *newAvlTree(avlComparator_t comparator) {
+    if (!comparator) {
+        return NULL;
+    }
+
     AvlTree *result = (AvlTree *) malloc(sizeof(AvlTree));
     if (!result) {
         return NULL;
     }
 
     result->root = NULL;
+    result->comparator = comparator;
     return result;
 }
 
@@ -28,7 +33,7 @@ int insertIntoAvlTree(AvlTree *this, avlContent_t value) {
     }
 
     if (this->root) {
-        return insertIntoAvlTreeNode(this->root, value);
+        return insertIntoAvlTreeNode(this->root, value, this->comparator);
     }
 
     AvlTreeNode *newNode = newAvlTreeNode(value);
@@ -53,5 +58,14 @@ int findInAvlTree(AvlTree *this, avlContent_t value) {
         return 0;
     }
 
-    return findInAvlTreeNode(this->root, value);
+    return findInAvlTreeNode(this->root, value, this->comparator);
+}
+
+int setComparator(AvlTree *this, avlComparator_t comparator) {
+    if (!this || !comparator) {
+        return 1;
+    }
+
+    this->comparator = comparator;
+    return 0;
 }
