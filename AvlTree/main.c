@@ -3,18 +3,21 @@
 #endif
 
 #define AVL_CONTENT_T
-// TODO: why 'typedef char ...' results in height of 11?
-typedef double avlContent_t;
+typedef int avlContent_t;
 
 #include <stdio.h>
 #include <mem.h>
+#include <math.h>
+#include <malloc.h>
+
 
 #include "avlTree.h"
 
 int compare(avlContent_t first, avlContent_t second) {
-    double difference = first - second;
-    return difference > 0 ? 1 : difference < 0 ? -1 : 0;
+    return first - second;
 }
+
+
 
 int main(int argc, char **argv) {
     AvlTree *tree;
@@ -44,4 +47,3 @@ int main(int argc, char **argv) {
     printf("All ok");
     deleteAvlTree(tree);
 }
-

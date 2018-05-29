@@ -60,12 +60,3 @@ int findInAvlTree(AvlTree *this, avlContent_t value) {
 
     return findInAvlTreeNode(this->root, value, this->comparator);
 }
-
-int setComparator(AvlTree *this, avlComparator_t comparator) {
-    if (!this || !comparator) {
-        return 1;
-    }
-
-    this->comparator = comparator;
-    return 0;
-}

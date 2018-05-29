@@ -20,6 +20,4 @@ int heightOfAvlTree(AvlTree *this);
 /// @return whether this contains value or not
 int findInAvlTree(AvlTree *this, avlContent_t value);
 
-int setComparator(AvlTree *this, avlComparator_t comparator);
-
 #endif // AVL_TREE_H

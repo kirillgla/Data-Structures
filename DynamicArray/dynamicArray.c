@@ -63,7 +63,6 @@ int addToEndOfDynamicArray(DynamicArray *this, dynamicContent_t value) {
 
     if (this->actualSize == this->maxSize) {
         int newMaxSize = this->maxSize * 2;
-        // FIXME: next line causes Segmentation Fault
         dynamicContent_t *newData = (dynamicContent_t *) realloc(this->data, sizeof(dynamicContent_t) * newMaxSize);
         if (!newData) {
             return 3;
