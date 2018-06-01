@@ -5,3 +5,4 @@ Error codes:
   * -1 : operation not implemented
   *  1 : reference argument is null
   *  2 : memory allocation error
+  *  3 : attempted to insert value that is already present in tree

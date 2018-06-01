@@ -11,7 +11,7 @@ typedef int avlContent_t;
 /// comparator is supposed to return:
 ///     0 if arguments are equal
 ///     positive integer if first is greater than the second
-///     negative integer if first is smaller than the second
+///     negative integer if first is smaller than the seconds
 typedef int (*avlComparator_t)(avlContent_t, avlContent_t);
 
 typedef struct AvlTreeNode {

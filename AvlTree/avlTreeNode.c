@@ -31,6 +31,11 @@ int insertIntoAvlTreeNode(AvlTreeNode *this, avlContent_t value, avlComparator_t
         return 1;
     }
 
+    int comparisonResult = comparator(value, this->value);
+    if (!comparisonResult) {
+        return 3;
+    }
+
     AvlTreeNode **insertionPlace = comparator(value, this->value) < 0 ? &(this->left) : &(this->right);
     if (*insertionPlace) {
         int result = insertIntoAvlTreeNode(*insertionPlace, value, comparator);
