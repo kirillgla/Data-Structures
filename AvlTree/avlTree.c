@@ -60,3 +60,11 @@ int findInAvlTree(AvlTree *this, avlContent_t value) {
 
     return findInAvlTreeNode(this->root, value, this->comparator);
 }
+
+int removeFromAvlTree(AvlTree *this, avlContent_t value) {
+    if (!this) {
+        return 1;
+    }
+
+    return -1;
+}

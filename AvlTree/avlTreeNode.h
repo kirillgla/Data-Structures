@@ -3,9 +3,7 @@
 
 #ifndef AVL_CONTENT_T
 #define AVL_CONTENT_T
-
 typedef int avlContent_t;
-
 #endif
 
 /// comparator is supposed to return:

@@ -13,13 +13,14 @@ typedef int avlContent_t;
 #include <stdlib.h>
 
 #include "avlTree.h"
+#include "avlTreeNode.h"
 
 int compare(avlContent_t first, avlContent_t second) {
     return first - second;
 }
 
 static const unsigned int SEED = 1234567;
-static const unsigned int DATA_SIZE = 1000;
+static const unsigned int DATA_SIZE = 10000;
 
 int *createData() {
     int *result = malloc(sizeof(int) * DATA_SIZE);
@@ -40,24 +41,13 @@ void freeAll(AvlTree *tree, int *data) {
     free(data);
 }
 
-void printFirst(FILE *file, int *data, int count, int ellipsis) {
-    fprintf(file, "[");
-    for (int i = 0; i < count - 1; i++) {
-        fprintf(file,  "%d, ", data[i]);
-    }
-    fprintf(file, "%d", data[count - 1]);
-    if (ellipsis) {
-        fprintf(file, ", ...");
-    }
-    fprintf(file, "]\r\n");
-}
-
 int main(int argc, char **argv) {
     AvlTree *tree;
     int *data;
     int result;
     int duplicates = 0;
 
+    // Test creation
     tree = newAvlTree(&compare);
     data = createData();
     if (!tree || !data) {
@@ -66,7 +56,8 @@ int main(int argc, char **argv) {
         return 2;
     }
 
-    for (int i = 0; i < 1000; i++) {
+    // Test insertion
+    for (int i = 0; i < DATA_SIZE; i++) {
         result = insertIntoAvlTree(tree, data[i]);
         if (result == 3) {
             duplicates++;
@@ -79,11 +70,13 @@ int main(int argc, char **argv) {
         }
     }
 
+    printf("With input size of %d, AVL tree height is %d\r\n", DATA_SIZE, heightOfAvlTree(tree));
     if (duplicates) {
         printf("Warning: there were %d out of %d duplicate values in input\r\n", duplicates, DATA_SIZE);
     }
 
-    for (int i = 0; i < 1000; i++) {
+    // Test search
+    for (int i = 0; i < DATA_SIZE; i++) {
         result = findInAvlTree(tree, data[i]);
         if (!result) {
             printf("Error: data[%d] (= %d) not found\r\n", i, data[i]);
@@ -92,7 +85,21 @@ int main(int argc, char **argv) {
         }
     }
 
-    printf("AVL tree has height of %d\r\n", heightOfAvlTree(tree));
+    // Test removing
+    result = removeFromAvlTree(tree, data[0]);
+    if (result) {
+        printf("Error: could not delete value\r\n");
+        freeAll(tree, data);
+        return result;
+    }
+
+    result = findInAvlTree(tree, data[0]);
+    if (result) {
+        printf("Error: removed value is still present in tree\r\n");
+        freeAll(tree, data);
+        return result;
+    }
+
     printf("All ok\r\n");
     freeAll(tree, data);
 }
