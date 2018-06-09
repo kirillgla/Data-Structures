@@ -1,1 +1,5 @@
-This is repository for data structures I implemented
+Some data structures I implemented.
+
+Just for fun.
+
+Language: C
