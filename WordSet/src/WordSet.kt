@@ -3,7 +3,7 @@ package borsk.editorconfig.collections
 /**
  * A set of words that provides string query operations
  */
-interface WordSet : MutableSet<String> {
+interface WordSet : Set<String> {
   /**
    * Determines whether or not [WordSet] contains
    * at least one string starting with [prefix]
