@@ -1,64 +1,57 @@
-package borsk.editorconfig.collections
-
+import borsk.editorconfig.collections.MutableWordSet
+import borsk.editorconfig.collections.PrefixTree
 import org.junit.Assert.*
+import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 
-class TreeWordSetTest {
+@Ignore("PrefixTree is not yet implemented")
+class WordSetTest {
+  private lateinit var set: MutableWordSet
+
+  @Before
+  fun initialize() {
+    set = PrefixTree()
+  }
 
   // containsPrefix() tests
 
   @Test
   fun testContainsPrefixWhenGivenWordPresent() {
-    val set = TreeWordSet()
     set.add("hell")
-
     val contains = set.containsPrefix("hell")
-
     assertTrue(contains)
   }
 
   @Test
   fun testContainsPrefixWhenPrefixWordPresent() {
-    val set = TreeWordSet()
     set.add("hello")
-
     val contains = set.containsPrefix("hell")
-
     assertTrue(contains)
   }
 
   @Test
   fun testContainsPrefixWhenGreaterNonPrefixWordPresent() {
-    val set = TreeWordSet()
     set.add("AAAB")
-
     val contains = set.containsPrefix("AAAA")
-
     assertFalse(contains)
   }
 
   @Test
   fun testContainsPrefixWhenNoGreaterWordPresent() {
-    val set = TreeWordSet()
     set.add("AAAA omg what's going on")
-
     val contains = set.containsPrefix("AAAB")
-
     assertFalse(contains)
   }
 
   @Test
   fun testContainsPrefixWhenSetIsEmpty() {
-    val set = TreeWordSet()
-
     val contains = set.containsPrefix("hello")
-
     assertFalse(contains)
   }
 
   @Test
   fun testContainsPrefixOnComplexData() {
-    val set = TreeWordSet()
     set.add("hello")
     set.add("helo")
     set.add("world")
@@ -73,8 +66,6 @@ class TreeWordSetTest {
 
   @Test
   fun testGetWordsStartingWithPrefixWhenSetIsEmpty() {
-    val set = TreeWordSet()
-
     val words = set.getWordsStartingWith("hel")
     val count = words.size.toLong()
 
@@ -83,7 +74,6 @@ class TreeWordSetTest {
 
   @Test
   fun testGetWordsStartingWithPrefixWhenNoMatchesPresent() {
-    val set = TreeWordSet()
     set.add("feed")
     set.add("feel")
     set.add("foo")
@@ -98,7 +88,6 @@ class TreeWordSetTest {
 
   @Test
   fun testGetWordsStartingWithPrefixWhenPrefixPresent() {
-    val set = TreeWordSet()
     set.add("feed")
     set.add("feel")
     set.add("foo")
@@ -113,7 +102,6 @@ class TreeWordSetTest {
 
   @Test
   fun testGetWordsStartingWithPrefixWhenSingleMatchPresent() {
-    val set = TreeWordSet()
     set.add("feed")
     set.add("feel")
     set.add("foo")
@@ -128,7 +116,6 @@ class TreeWordSetTest {
 
   @Test
   fun testGetWordsStartingWithPrefixWhenMultipleMatchesPresent() {
-    val set = TreeWordSet()
     set.add("feed")
     set.add("feel")
     set.add("foo")
