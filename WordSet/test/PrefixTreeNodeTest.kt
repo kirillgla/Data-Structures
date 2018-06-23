@@ -22,7 +22,7 @@ class PrefixTreeNodeTest {
 
   @Test
   fun testIsWordEndOnWordEnd() {
-    node.data = ""
+    node.data = "a"
     val result = node.isWordEnd
 
     assertTrue(result)
@@ -30,7 +30,7 @@ class PrefixTreeNodeTest {
 
   @Test
   fun testFindOnPresentValue() {
-    node.data = ""
+    node.data = "a"
     val found = node.find("a", 0)
 
     assertTrue(found)
@@ -63,7 +63,7 @@ class PrefixTreeNodeTest {
     }
     val result = node.find("hee", 0)
 
-    assertTrue(result, "Failed to find value present in node")
+    assertTrue(result)
   }
 
   @Test
@@ -79,6 +79,7 @@ class PrefixTreeNodeTest {
 
   @Test
   fun testFindPrefixOnPrefixPresent() {
+    node.myChildren['x'] = PrefixTreeNode().also { it.data = "ax" }
     val result = node.findPrefix("a", 0)
 
     assertTrue(result)
@@ -86,6 +87,7 @@ class PrefixTreeNodeTest {
 
   @Test
   fun testFindPrefixOnCorrectPrefixNotPresent() {
+    node.myChildren['c'] = PrefixTreeNode().also { it.data = "ac" }
     val result = node.findPrefix("ab", 0)
 
     assertFalse(result)
@@ -100,7 +102,7 @@ class PrefixTreeNodeTest {
 
   @Test
   fun testSubTreeSizeOnLastNode() {
-    node.data = ""
+    node.data = "Q"
     val size = node.subTreeSize
 
     assertEquals(1, size)
@@ -168,4 +170,14 @@ class PrefixTreeNodeTest {
     assertEquals("ABC", savedABC)
     assertEquals("ABCD", savedABCD)
   }
+
+  @Test(expected = IllegalArgumentException::class)
+  fun testAddThrowsOnInvalidInput() {
+    node.add("", 0)
+  }
+
+  /*@Test
+  fun testFindAllPrefixedOnEmptySet() {
+    node.findAllPrefixed()
+  }*/
 }

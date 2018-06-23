@@ -7,21 +7,18 @@ class PrefixTree : MutableWordSet {
   override val size: Int
     get() = myChildren.map { it.subTreeSize }.sum()
 
-  override fun containsPrefix(prefix: String): Boolean {
-    if (prefix.isEmpty()) {
-      return !isEmpty()
-    }
-    return myChildren[prefix[0]]?.findPrefix(prefix, 0) ?: false
-  }
+  override fun containsPrefix(prefix: String): Boolean =
+    if (prefix.isEmpty()) !isEmpty()
+    else myChildren[prefix[0]]?.findPrefix(prefix) ?: false
 
   override fun getWordsStartingWith(prefix: String): List<String> {
     TODO("not implemented")
   }
 
-  override fun add(element: String): Boolean {
-//    if (myChildren)
-    TODO()
-  }
+  override fun add(element: String): Boolean =
+    if (element.isEmpty()) false
+    else (myChildren[element[0]] ?: PrefixTreeNode().also { myChildren[element[0]] = it })
+      .add(element, 0)
 
   override fun addAll(elements: Collection<String>): Boolean =
     elements.fold(false) { accumulator, current -> accumulator or add(current) }
@@ -41,7 +38,7 @@ class PrefixTree : MutableWordSet {
   }
 
   override fun contains(element: String): Boolean =
-    myChildren[element[0]]?.find(element, 0) ?: false
+    myChildren[element[0]]?.find(element) ?: false
 
   override fun containsAll(elements: Collection<String>): Boolean =
     elements.fold(true) { acc, current -> acc && contains(current) }
@@ -51,5 +48,19 @@ class PrefixTree : MutableWordSet {
 
   override fun iterator(): MutableIterator<String> {
     TODO("not implemented")
+  }
+
+  override fun toString(): String {
+    var result = "Prefix tree:{"
+    for (char in CharMap.allLetters) {
+      val child = myChildren[char]
+      if (child != null) {
+        result += char
+        result += ":"
+        result += child.toString()
+      }
+    }
+    result += "};"
+    return result
   }
 }

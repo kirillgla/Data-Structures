@@ -113,4 +113,39 @@ class SimpleCharMapTest {
     val result = map.isEmpty()
     assertFalse(result)
   }
+
+  @Test
+  fun `test that simpleCharMap also correctly deals with digits, underscore and dash`() {
+    map['_'] = "Zoe"
+    map['-'] = "Mary"
+    map['5'] = "Nina"
+
+    val zoe1 = map['_']
+    val mary1 = map['-']
+    val nina1 = map['5']
+
+    map.delete('-')
+
+    val zoe2 = map['_']
+    val mary2 = map['-']
+    val nina2 = map['5']
+
+    map.clear()
+
+    val zoe3 = map['_']
+    val mary3 = map['-']
+    val nina3 = map['5']
+
+    assertEquals("Zoe", zoe1)
+    assertEquals("Mary", mary1)
+    assertEquals("Nina", nina1)
+
+    assertEquals("Zoe", zoe2)
+    assertNull(mary2)
+    assertEquals("Nina", nina2)
+
+    assertNull(zoe3)
+    assertNull(mary3)
+    assertNull(nina3)
+  }
 }

@@ -2,10 +2,8 @@ import borsk.editorconfig.collections.MutableWordSet
 import borsk.editorconfig.collections.PrefixTree
 import org.junit.Assert.*
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 
-@Ignore("PrefixTree is not yet implemented")
 class WordSetTest {
   private lateinit var set: MutableWordSet
 
@@ -18,29 +16,37 @@ class WordSetTest {
 
   @Test
   fun testContainsPrefixWhenGivenWordPresent() {
-    set.add("hell")
+    val added = set.add("hell")
     val contains = set.containsPrefix("hell")
+
+    assertTrue(added)
     assertTrue(contains)
   }
 
   @Test
   fun testContainsPrefixWhenPrefixWordPresent() {
-    set.add("hello")
+    val added = set.add("hello")
     val contains = set.containsPrefix("hell")
+
+    assertTrue(added)
     assertTrue(contains)
   }
 
   @Test
   fun testContainsPrefixWhenGreaterNonPrefixWordPresent() {
-    set.add("AAAB")
+    val added = set.add("AAAB")
     val contains = set.containsPrefix("AAAA")
+
+    assertTrue(added)
     assertFalse(contains)
   }
 
   @Test
   fun testContainsPrefixWhenNoGreaterWordPresent() {
-    set.add("AAAA omg what's going on")
+    val added = set.add("AAAA-omg-what-is-going-on")
     val contains = set.containsPrefix("AAAB")
+
+    assertTrue(added)
     assertFalse(contains)
   }
 
