@@ -156,7 +156,7 @@ class SimpleCharMap<E>(supplier: (value: Int) -> Array<E?>) : CharMap<E> {
         field = value
         nextIndex = getNextIndex()
       }
-    private var nextIndex: Char? = null
+    private var nextIndex: Char? = getNextIndex()
 
     /**
      * TODO: optimize this function
