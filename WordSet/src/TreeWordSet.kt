@@ -7,5 +7,6 @@ class TreeWordSet : TreeSet<String>(), MutableWordSet {
     ceiling(prefix)?.startsWith(prefix) ?: false
 
   override fun getWordsStartingWith(prefix: String): List<String> =
+    // TODO: write custom lazy takeWhile
     tailSet(prefix).takeWhile { it.startsWith(prefix) }
 }

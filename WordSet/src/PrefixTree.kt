@@ -3,11 +3,11 @@ package borsk.editorconfig.collections
 import java.util.*
 
 class PrefixTree : MutableWordSet {
-  private val myChildren: CharMap<PrefixTreeNode> = SimpleCharMap()
+  private val myRoot = PrefixTreeRoot()
   // private var myModCount = 0
 
   override val size: Int
-    get() = myChildren.map { it.subTreeSize }.sum()
+    get() = myRoot.subTreeSize
 
   override fun containsPrefix(prefix: String): Boolean =
     if (prefix.isEmpty()) !isEmpty()
@@ -48,22 +48,12 @@ class PrefixTree : MutableWordSet {
     elements.fold(true) { acc, current -> acc && contains(current) }
 
   override fun isEmpty(): Boolean =
-    myChildren.isEmpty()
+    myRoot.isEmpty()
 
   override fun iterator(): MutableIterator<String> =
     TODO("Not implemented")
 
   override fun toString(): String {
-    var result = "Prefix tree:{"
-    for (char in CharMap.allLetters) {
-      val child = myChildren[char]
-      if (child != null) {
-        result += char
-        result += ":"
-        result += child.toString()
-      }
-    }
-    result += "};"
-    return result
+    return "Prefix tree:$myRoot"
   }
 }

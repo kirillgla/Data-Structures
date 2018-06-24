@@ -3,8 +3,13 @@ package borsk.editorconfig.collections
 import borsk.editorconfig.collections.CharMap.Companion.allLetters
 import java.lang.IllegalArgumentException
 
-internal class PrefixTreeNode {
-  internal val myChildren: CharMap<PrefixTreeNode> = SimpleCharMap()
+/**
+ * Represents a character in [PrefixTree].
+ */
+internal open class PrefixTreeNode {
+  // The odd decision was to leave the node
+  // without information about the character it represents
+  protected val myChildren: CharMap<PrefixTreeNode> = SimpleCharMap()
   var data: String? = null
     internal set
 
@@ -14,28 +19,24 @@ internal class PrefixTreeNode {
   val subTreeSize: Int
     get() = myChildren.map { it.subTreeSize }.sum() + if (isWordEnd) 1 else 0
 
-  fun find(string: String, start: Int = 0): Boolean =
-    customSearch(string, start) { it.isWordEnd }
-
-  fun findPrefix(string: String, start: Int = 0): Boolean =
-    customSearch(string, start) { true }
-
-  fun findAllPrefixed(prefix: String, start: Int = 0): List<String> =
-    ArrayList<String>().also { list -> customSearch(prefix, start) { node -> node.getAllData(list) } }
-
-  private fun customSearch(string: String, current: Int, onStringEnd: (PrefixTreeNode) -> Boolean): Boolean =
-    when (current) {
+  /**
+   * Performs search for [string] assuming current node represents [string][[next] - 1]
+   * and executes requested action if search succeeds.
+   */
+  protected fun customSearch(string: String, next: Int, onStringEnd: (PrefixTreeNode) -> Boolean): Boolean =
+    // FIXME: I renamed parameter to 'next' but did not update usages
+    when (next) {
       string.length - 1 ->
         onStringEnd(this)
 
       in 0 until string.length - 1 -> {
-        val nextIndex = current + 1
+        val nextIndex = next + 1
         val nextChar = string[nextIndex]
         myChildren[nextChar]?.customSearch(string, nextIndex, onStringEnd) ?: false
       }
 
       else ->
-        throw IllegalArgumentException("current")
+        throw IllegalArgumentException("next")
     }
 
   fun add(string: String, current: Int): Boolean =
@@ -93,6 +94,9 @@ internal class PrefixTreeNode {
 
       else -> throw IllegalArgumentException("current")
     }
+
+  fun isEmpty(): Boolean =
+    myChildren.none()
 
   /**
    * Returns text representation of current object.
