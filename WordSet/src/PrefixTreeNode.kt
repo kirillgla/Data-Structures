@@ -20,11 +20,8 @@ internal class PrefixTreeNode {
   fun findPrefix(string: String, start: Int = 0): Boolean =
     customSearch(string, start) { true }
 
-  fun findAllPrefixed(prefix: String, start: Int = 0): List<String> {
-    val list = ArrayList<String>()
-    customSearch(prefix, start) { it.getAllData(list) }
-    return list
-  }
+  fun findAllPrefixed(prefix: String, start: Int = 0): List<String> =
+    ArrayList<String>().also { list -> customSearch(prefix, start) { node -> node.getAllData(list) } }
 
   private fun customSearch(string: String, current: Int, onStringEnd: (PrefixTreeNode) -> Boolean): Boolean =
     when (current) {
@@ -63,8 +60,7 @@ internal class PrefixTreeNode {
 
   /**
    * Fetches all the data from subtree.
-   * Returns true if any object was added to [destination],
-   * false otherwise
+   * Returns whether any object was added to [destination] or not
    */
   fun getAllData(destination: MutableList<String>): Boolean {
     var result = false
@@ -74,6 +70,29 @@ internal class PrefixTreeNode {
     }
     return result
   }
+
+  /**
+   * Deletes [string] from prefix tree.
+   * Current node represents [string][[current]].
+   * Returns whether collection has been modified or not
+   */
+  fun remove(string: String, current: Int): Boolean =
+    when (current) {
+      in 0 until string.length - 1 -> {
+        val nextIndex = current + 1
+        val nextChar = string[nextIndex]
+        myChildren[nextChar]?.let { child ->
+          child.remove(string, nextIndex).also { result ->
+            if (result && child.myChildren.any())
+              myChildren.delete(nextChar)
+          }
+        } ?: false
+      }
+
+      string.length - 1 -> data?.let { data = null; true } ?: false
+
+      else -> throw IllegalArgumentException("current")
+    }
 
   /**
    * Returns text representation of current object.

@@ -1,5 +1,7 @@
 package borsk.editorconfig.collections
 
+import java.util.*
+
 class PrefixTree : MutableWordSet {
   private val myChildren: CharMap<PrefixTreeNode> = SimpleCharMap()
   // private var myModCount = 0
@@ -11,9 +13,11 @@ class PrefixTree : MutableWordSet {
     if (prefix.isEmpty()) !isEmpty()
     else myChildren[prefix[0]]?.findPrefix(prefix) ?: false
 
-  override fun getWordsStartingWith(prefix: String): List<String> {
-    TODO("not implemented")
-  }
+  override fun getWordsStartingWith(prefix: String): List<String> =
+    if (prefix.isEmpty())
+      myChildren.fold(ArrayList()) { list, node -> list.also { node.getAllData(it) } }
+    else
+      myChildren[prefix[0]]?.findAllPrefixed(prefix) ?: Collections.emptyList()
 
   override fun add(element: String): Boolean =
     if (element.isEmpty()) false
@@ -26,9 +30,9 @@ class PrefixTree : MutableWordSet {
   override fun clear() =
     myChildren.clear()
 
-  override fun remove(element: String): Boolean {
-    TODO("not implemented")
-  }
+  override fun remove(element: String): Boolean =
+    if (element.isEmpty()) false
+    else myChildren[element[0]]?.remove(element, 0) ?: false
 
   override fun removeAll(elements: Collection<String>): Boolean =
     elements.fold(false) { accumulator, current -> accumulator or remove(current) }
@@ -46,9 +50,8 @@ class PrefixTree : MutableWordSet {
   override fun isEmpty(): Boolean =
     myChildren.isEmpty()
 
-  override fun iterator(): MutableIterator<String> {
-    TODO("not implemented")
-  }
+  override fun iterator(): MutableIterator<String> =
+    TODO("Not implemented")
 
   override fun toString(): String {
     var result = "Prefix tree:{"

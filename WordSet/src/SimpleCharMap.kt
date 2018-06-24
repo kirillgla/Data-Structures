@@ -179,14 +179,15 @@ class SimpleCharMap<E>(supplier: (value: Int) -> Array<E?>) : CharMap<E> {
       return map[currentIndex] ?: throw ConcurrentModificationException()
     }
 
-    // TODO: rewrite in a more straightforward imperative style
     private fun findUppercaseIndex(start: Char): Char? =
       map.myUppercaseValues
         .mapIndexedNotNull { index, element ->
           if (element == null || index <= start - FirstUppercase) null
           else index
         }
-        .firstOrNull()?.plus(FirstLowercase.toInt())?.toChar()
+        .firstOrNull()
+        ?.plus(FirstLowercase.toInt())
+        ?.toChar()
 
     private fun findLowercaseIndex(start: Char): Char? =
       map.myLowercaseValues
@@ -194,7 +195,9 @@ class SimpleCharMap<E>(supplier: (value: Int) -> Array<E?>) : CharMap<E> {
           if (element == null || index <= start - FirstLowercase) null
           else index
         }
-        .firstOrNull()?.plus(FirstLowercase.toInt())?.toChar()
+        .firstOrNull()
+        ?.plus(FirstLowercase.toInt())
+        ?.toChar()
 
     private fun findDigitIndex(start: Char): Char? =
       map.myDigitsValues
@@ -202,7 +205,9 @@ class SimpleCharMap<E>(supplier: (value: Int) -> Array<E?>) : CharMap<E> {
           if (element == null || index <= start - FirstDigit) null
           else index
         }
-        .firstOrNull()?.plus(FirstDigit.toInt())?.toChar()
+        .firstOrNull()
+        ?.plus(FirstDigit.toInt())
+        ?.toChar()
 
     private fun findUnderscoreIndex(start: Char): Char? =
       if (map.myUnderscoreValue == null || Underscore <= start) null

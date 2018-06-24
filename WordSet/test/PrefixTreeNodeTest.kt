@@ -13,6 +13,8 @@ class PrefixTreeNodeTest {
     node = PrefixTreeNode()
   }
 
+  // isWordEnd tests
+
   @Test
   fun testIsWordEndOnNonWordEnd() {
     val result = node.isWordEnd
@@ -27,6 +29,8 @@ class PrefixTreeNodeTest {
 
     assertTrue(result)
   }
+
+  // find() tests
 
   @Test
   fun testFindOnPresentValue() {
@@ -77,6 +81,8 @@ class PrefixTreeNodeTest {
     assertFalse(result)
   }
 
+  // findPrefix() tests
+
   @Test
   fun testFindPrefixOnPrefixPresent() {
     node.myChildren['x'] = PrefixTreeNode().also { it.data = "ax" }
@@ -100,6 +106,8 @@ class PrefixTreeNodeTest {
     assertFalse(result)
   }
 
+  // subTreeSize tests
+
   @Test
   fun testSubTreeSizeOnLastNode() {
     node.data = "Q"
@@ -119,6 +127,8 @@ class PrefixTreeNodeTest {
 
     assertEquals(3, size)
   }
+
+  // add() tests
 
   @Test
   fun testAddWhenValuePresent() {
@@ -176,8 +186,70 @@ class PrefixTreeNodeTest {
     node.add("", 0)
   }
 
-  /*@Test
+  // findAllPrefixed() tests
+
+  @Test
   fun testFindAllPrefixedOnEmptySet() {
-    node.findAllPrefixed()
-  }*/
+    val result = node.findAllPrefixed("Zoe", 0)
+    assertEquals(0, result.size)
+  }
+
+  @Test
+  fun testFindAllPrefixedWhenNoPrefixPresent() {
+    node.add("Zoe", 0)
+    val result = node.findAllPrefixed("aaa", 0)
+    assertEquals(0, result.size)
+  }
+
+  @Test
+  fun testFindAllPrefixedWhenExactMatchPresent() {
+    node.add("Zoe", 0)
+    val result = node.findAllPrefixed("Zoe", 0)
+    assertEquals(1, result.size)
+    assertEquals("Zoe", result[0])
+  }
+
+  @Test
+  fun testFindAllPrefixedWhenShorterWordPresent() {
+    node.add("Zo", 0)
+    val result = node.findAllPrefixed("Zoe", 0)
+    assertEquals(0, result.size)
+  }
+
+  @Test
+  fun testFindAllPrefixedWhenLongerWordPresent() {
+    node.add("Zoe-zoe", 0)
+    val result = node.findAllPrefixed("Zoe", 0)
+    assertEquals(1, result.size)
+    assertEquals("Zoe-zoe", result[0])
+  }
+
+  @Test
+  fun testFindAllPrefixedOnComplicatedData() {
+    // node represents letter 'f'
+
+    node.myChildren['e'] = PrefixTreeNode().also {
+      it.myChildren['e'] = PrefixTreeNode().also {
+        it.myChildren['d'] = PrefixTreeNode().also { it.data = "feed" }
+        it.myChildren['l'] = PrefixTreeNode().also { it.data = "feel" }
+      }
+    }
+
+    node.myChildren['o'] = PrefixTreeNode().also {
+      it.myChildren['o'] = PrefixTreeNode().also { it.data = "foo" }
+    }
+
+    node.myChildren['a'] = PrefixTreeNode().also {
+      it.myChildren['r'] = PrefixTreeNode().also { it.data = "far" }
+      it.myChildren['l'] = PrefixTreeNode().also {
+        it.myChildren['l'] = PrefixTreeNode().also { it.data = "fall" }
+      }
+    }
+
+    val result = node.findAllPrefixed("fe", 0)
+    assertEquals(2, result.size)
+    assertTrue(result.containsAll(listOf("feed", "feel")))
+  }
+
+  // TODO: test remove
 }
