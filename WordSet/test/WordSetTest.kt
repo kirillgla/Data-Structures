@@ -1,3 +1,4 @@
+
 import borsk.editorconfig.collections.MutableWordSet
 import borsk.editorconfig.collections.PrefixTree
 import org.junit.Assert.*
@@ -68,12 +69,12 @@ class WordSetTest {
     assertTrue(result)
   }
 
-  // getWordsStartingWith() tests
+  // getAllWithPrefix() tests
 
   @Test
   fun testGetWordsStartingWithPrefixWhenSetIsEmpty() {
-    val words = set.getWordsStartingWith("hel")
-    val count = words.size.toLong()
+    val words = set.getAllWithPrefix("hel")
+    val count = words.count()
 
     assertEquals(0, count)
   }
@@ -86,8 +87,8 @@ class WordSetTest {
     set.add("far")
     set.add("fall")
 
-    val words = set.getWordsStartingWith("hel")
-    val count = words.size.toLong()
+    val words = set.getAllWithPrefix("hel")
+    val count = words.count()
 
     assertEquals(0, count)
   }
@@ -100,10 +101,13 @@ class WordSetTest {
     set.add("far")
     set.add("fall")
 
-    val words = set.getWordsStartingWith("fall")
+    val words = set.getAllWithPrefix("fall")
+    val iterator = words.iterator()
+    val first = iterator.next()
+    val hasSecond = iterator.hasNext()
 
-    assertEquals(1, words.size.toLong())
-    assertEquals("fall", words[0])
+    assertEquals("fall", first)
+    assertFalse(hasSecond)
   }
 
   @Test
@@ -114,10 +118,13 @@ class WordSetTest {
     set.add("far")
     set.add("fall")
 
-    val words = set.getWordsStartingWith("fal")
+    val words = set.getAllWithPrefix("fal")
+    val iterator = words.iterator()
+    val first = iterator.next()
+    val hasSecond = iterator.hasNext()
 
-    assertEquals(1, words.size.toLong())
-    assertEquals("fall", words[0])
+    assertEquals("fall", first)
+    assertFalse(hasSecond)
   }
 
   @Test
@@ -128,10 +135,14 @@ class WordSetTest {
     set.add("far")
     set.add("fall")
 
-    val words = set.getWordsStartingWith("fe")
+    val words = set.getAllWithPrefix("fe")
+    val iterator = words.iterator()
+    val first = iterator.next()
+    val second = iterator.next()
+    val hasThird = iterator.hasNext()
 
-    assertEquals(2, words.size.toLong())
-    assertEquals("feed", words[0])
-    assertEquals("feel", words[1])
+    assertEquals("feed", first)
+    assertEquals("feel", second)
+    assertFalse(hasThird)
   }
 }

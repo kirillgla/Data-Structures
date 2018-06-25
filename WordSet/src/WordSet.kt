@@ -11,7 +11,8 @@ interface WordSet : Set<String> {
   fun containsPrefix(prefix: String): Boolean
 
   /**
-   * Acquires all strings in [WordSet] that start with [prefix]
+   * Acquires all strings in [WordSet] that start with [prefix].
+   * Some implementations may not be lazy
    */
-  fun getWordsStartingWith(prefix: String): List<String>
+  fun getAllWithPrefix(prefix: String): Sequence<String>
 }

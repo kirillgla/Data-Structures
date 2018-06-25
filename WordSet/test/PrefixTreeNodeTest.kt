@@ -1,30 +1,23 @@
 import borsk.editorconfig.collections.PrefixTreeNode
-import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class PrefixTreeNodeTest {
-  private lateinit var node: PrefixTreeNode
-
-  @Before
-  fun initialize() {
-    node = PrefixTreeNode()
-  }
 
   // isWordEnd tests
 
   @Test
   fun testIsWordEndOnNonWordEnd() {
-    val result = node.isWordEnd
+    val result = PrefixTreeNode().isWordEnd
 
     assertFalse(result)
   }
 
   @Test
   fun testIsWordEndOnWordEnd() {
-    node.data = "a"
+    val node = PrefixTreeNode(myData = "a")
     val result = node.isWordEnd
 
     assertTrue(result)
@@ -34,7 +27,7 @@ class PrefixTreeNodeTest {
 
   @Test
   fun testFindOnPresentValue() {
-    node.data = "a"
+    val node = PrefixTreeNode(myData = "a")
     val found = node.find("a", 0)
 
     assertTrue(found)
@@ -81,12 +74,12 @@ class PrefixTreeNodeTest {
     assertFalse(result)
   }
 
-  // findPrefix() tests
+  // containsPrefix() tests
 
   @Test
   fun testFindPrefixOnPrefixPresent() {
     node.myChildren['x'] = PrefixTreeNode().also { it.data = "ax" }
-    val result = node.findPrefix("a", 0)
+    val result = node.containsPrefix("a", 0)
 
     assertTrue(result)
   }
@@ -94,14 +87,14 @@ class PrefixTreeNodeTest {
   @Test
   fun testFindPrefixOnCorrectPrefixNotPresent() {
     node.myChildren['c'] = PrefixTreeNode().also { it.data = "ac" }
-    val result = node.findPrefix("ab", 0)
+    val result = node.containsPrefix("ab", 0)
 
     assertFalse(result)
   }
 
   @Test
   fun testFindPrefixOnIncorrectPrefix() {
-    val result = node.findPrefix("a%", 0)
+    val result = node.containsPrefix("a%", 0)
 
     assertFalse(result)
   }
@@ -253,3 +246,4 @@ class PrefixTreeNodeTest {
 
   // TODO: test remove
 }
+

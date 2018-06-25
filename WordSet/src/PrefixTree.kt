@@ -1,59 +1,52 @@
 package borsk.editorconfig.collections
 
-import java.util.*
-
+// TODO: use sequences wherever possible
 class PrefixTree : MutableWordSet {
-  private val myRoot = PrefixTreeRoot()
+  private val myRoot = PrefixTreeNode()
   // private var myModCount = 0
 
   override val size: Int
     get() = myRoot.subTreeSize
 
   override fun containsPrefix(prefix: String): Boolean =
-    if (prefix.isEmpty()) !isEmpty()
-    else myChildren[prefix[0]]?.findPrefix(prefix) ?: false
+    myRoot.customSearch(prefix, 0) { true }
 
-  override fun getWordsStartingWith(prefix: String): List<String> =
-    if (prefix.isEmpty())
-      myChildren.fold(ArrayList()) { list, node -> list.also { node.getAllData(it) } }
-    else
-      myChildren[prefix[0]]?.findAllPrefixed(prefix) ?: Collections.emptyList()
+  override fun getAllWithPrefix(prefix: String): Sequence<String> =
+  // ArrayList<String>().also { list -> myRoot.customSearch(prefix, 0) { node -> node.getAllData(list) } }
+    TODO("return a lazy iterator and rewrite the method in more efficient way")
+
+  override fun contains(element: String): Boolean =
+    myRoot.customSearch(element, 0, PrefixTreeNode::isWordEnd)
+
+  override fun containsAll(elements: Collection<String>): Boolean =
+    elements.all(this::contains) // No need for using sequences
+
+  override fun isEmpty(): Boolean =
+    myRoot.isEmpty()
 
   override fun add(element: String): Boolean =
-    if (element.isEmpty()) false
-    else (myChildren[element[0]] ?: PrefixTreeNode().also { myChildren[element[0]] = it })
-      .add(element, 0)
+    myRoot.insert(element)
 
   override fun addAll(elements: Collection<String>): Boolean =
-    elements.fold(false) { accumulator, current -> accumulator or add(current) }
-
-  override fun clear() =
-    myChildren.clear()
+    elements.asSequence().map(this::add).fold(false) { acc, element -> acc or element }
 
   override fun remove(element: String): Boolean =
-    if (element.isEmpty()) false
-    else myChildren[element[0]]?.remove(element, 0) ?: false
+    myRoot.remove(element)
 
   override fun removeAll(elements: Collection<String>): Boolean =
-    elements.fold(false) { accumulator, current -> accumulator or remove(current) }
+    elements.asSequence().map(this::remove).fold(false) { acc, element -> acc or element }
 
   override fun retainAll(elements: Collection<String>): Boolean {
     TODO("not implemented")
   }
 
-  override fun contains(element: String): Boolean =
-    myChildren[element[0]]?.find(element) ?: false
+  override fun clear() =
+    myRoot.clear()
 
-  override fun containsAll(elements: Collection<String>): Boolean =
-    elements.fold(true) { acc, current -> acc && contains(current) }
-
-  override fun isEmpty(): Boolean =
-    myRoot.isEmpty()
-
-  override fun iterator(): MutableIterator<String> =
-    TODO("Not implemented")
-
-  override fun toString(): String {
-    return "Prefix tree:$myRoot"
+  override fun iterator(): MutableIterator<String> {
+    TODO("not implemented")
   }
+
+  override fun toString(): String =
+    "Prefix tree:$myRoot"
 }
