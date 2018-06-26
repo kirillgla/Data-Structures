@@ -1,4 +1,3 @@
-
 import borsk.editorconfig.collections.CharMap
 import borsk.editorconfig.collections.LazyCharMap
 import org.junit.Before
@@ -84,12 +83,23 @@ class LazyCharMapIteratorTest {
   }
 
   @Test(expected = ConcurrentModificationException::class)
-  fun `test that next() throws when collection is modified`() {
+  fun `test that next() throws when non-empty collection is modified`() {
     map['e'] = "foo"
     map['g'] = "bar"
     val iterator = map.iterator()
     iterator.next()
     map['f'] = "bas"
+    iterator.next()
+  }
+
+  @Test(expected = ConcurrentModificationException::class)
+  fun `test that next() throws when empty collection is modified`() {
+    val iterator = map.iterator()
+
+    val hasFirst = iterator.hasNext()
+
+    assertFalse(hasFirst)
+    map['w'] = "Zoe"
     iterator.next()
   }
 

@@ -5,23 +5,36 @@ import java.lang.IllegalArgumentException
 
 // node is left without explicit information
 // about the character it represents, if any
-internal class PrefixTreeNode internal constructor(
-  private val myChildren: CharMap<PrefixTreeNode> = LazyCharMap(),
-  private var myData: String? = null
-) {
+internal class PrefixTreeNode internal constructor(data: String? = null) {
+
+  private val myChildren: CharMap<PrefixTreeNode> = LazyCharMap()
+
+  private var myData: String? = data
+    set(value) {
+      if (field == null && value != null) {
+        subtreeSize += 1
+      } else if (field != null && value == null) {
+        subtreeSize -= 1
+      }
+      field = value
+    }
 
   val isWordEnd
     get() = myData != null
 
-  val subTreeSize: Int
-    get() = myChildren.map(PrefixTreeNode::subTreeSize).sum() + if (isWordEnd) 1 else 0
+  var subtreeSize: Int = if (data == null) 0 else 1
+    private set
+
+  internal val actualSubtreeSize
+    get() = myChildren.map(PrefixTreeNode::subtreeSize).sum() + if (isWordEnd) 1 else 0
 
   fun isEmpty(): Boolean =
-    myChildren.none()
+    subtreeSize == 0
 
   fun clear() {
     myData = null
-    AllLetters.forEach(myChildren::delete)
+    myChildren.clear()
+    subtreeSize = 0
   }
 
   /**
@@ -49,30 +62,28 @@ internal class PrefixTreeNode internal constructor(
    */
   fun insert(string: String, next: Int = 0): Boolean {
     return when (next) {
-      string.length ->
-        myData?.let { false } ?: run { myData = string; true }
+      string.length -> {
+        if (myData == null) {
+          myData = string
+          true
+        } else {
+          false
+        }
+      }
 
       in 0 until string.length -> {
         val nextChar = string[next]
-        (myChildren[nextChar] ?: PrefixTreeNode().also { myChildren[nextChar] = it })
-          .insert(string, next + 1)
+        val node = myChildren[nextChar] ?: PrefixTreeNode().also { myChildren[nextChar] = it }
+        val result = node.insert(string, next + 1)
+        if (result) {
+          subtreeSize += 1
+        }
+
+        result
       }
 
       else -> throw IllegalArgumentException("next")
     }
-  }
-
-  /**
-   * Fetches all the data from subtree.
-   * Returns whether any object was added to [destination] or not
-   */
-  private fun getAllData(destination: MutableList<String>): Boolean {
-    var result = false
-    myData?.let { notNullData -> result = destination.add(notNullData) }
-    myChildren.forEach {
-      result = result or it.getAllData(destination)
-    }
-    return result
   }
 
   /**
@@ -80,23 +91,26 @@ internal class PrefixTreeNode internal constructor(
    * assuming current node represents [string][[next - 1]].
    * Returns whether collection has been modified or not
    */
-  fun remove(string: String, next: Int = 0): Boolean =
+  fun remove(string: String, next: Int = 0): Boolean {
     when (next) {
-      string.length -> myData?.let { myData = null; true } ?: false
+      string.length -> return myData?.let { myData = null; true } ?: false
 
       in 0 until string.length -> {
         val nextChar = string[next]
-        myChildren[nextChar]?.let { child ->
-          child.remove(string, next + 1)
-            .also { result ->
-              if (result && child.myChildren.any())
-                myChildren.delete(nextChar)
-            }
-        } ?: false
+        val child = myChildren[nextChar] ?: return false
+        val result = child.remove(string, next + 1)
+        if (result) {
+          subtreeSize -= 1
+          if (child.isEmpty()) {
+            myChildren.delete(nextChar)
+          }
+        }
+        return result
       }
 
       else -> throw IllegalArgumentException("next")
     }
+  }
 
   /**
    * Note: this method is very wasteful

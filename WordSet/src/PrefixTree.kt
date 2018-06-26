@@ -6,7 +6,7 @@ class PrefixTree : MutableWordSet {
   // private var myModCount = 0
 
   override val size: Int
-    get() = myRoot.subTreeSize
+    get() = myRoot.subtreeSize
 
   override fun containsPrefix(prefix: String): Boolean =
     myRoot.customSearch(prefix, 0) { true }
