@@ -3,8 +3,7 @@ package borsk.editorconfig.collections
 /**
  * Maps valid characters to matching elements
  */
-interface CharMap<E> : Iterable<E> {
-  // TODO: implement lazy char map
+internal interface CharMap<E> : Iterable<E> {
   operator fun get(index: Char): E?
 
   operator fun set(index: Char, value: E)
@@ -17,11 +16,13 @@ interface CharMap<E> : Iterable<E> {
     private const val LastUppercase = 'Z'
     val UppercaseLetters = FirstUppercase..LastUppercase
 
+    const val NumberOfUppercaseLetters = LastUppercase - FirstUppercase + 1
+
     const val FirstLowercase = 'a'
     private const val LastLowercase = 'z'
     val LowercaseLetters = FirstLowercase..LastLowercase
 
-    const val LettersInAlphabet = LastUppercase - FirstUppercase + 1
+    const val NumberOfLowercaseLetters = LastLowercase - FirstLowercase + 1
 
     const val FirstDigit = '0'
     private const val LastDigit = '9'
@@ -32,6 +33,14 @@ interface CharMap<E> : Iterable<E> {
     const val Underscore = '_'
     const val Dash = '-'
 
-    val allLetters = UppercaseLetters + LowercaseLetters + Digits + Underscore + Dash
+    val AllLetters = ArrayList<Char>().apply {
+      add(Dash)
+      addAll(Digits)
+      addAll(UppercaseLetters)
+      add(Underscore)
+      addAll(LowercaseLetters)
+    }
+
+    val LettersCount = AllLetters.size
   }
 }

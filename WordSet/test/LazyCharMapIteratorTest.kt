@@ -1,5 +1,6 @@
+
 import borsk.editorconfig.collections.CharMap
-import borsk.editorconfig.collections.SimpleCharMap
+import borsk.editorconfig.collections.LazyCharMap
 import org.junit.Before
 import org.junit.Test
 import java.util.*
@@ -9,12 +10,12 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class SimpleCharMapIteratorTest {
+class LazyCharMapIteratorTest {
   private lateinit var map: CharMap<String>
 
   @Before
   fun initialize() {
-    map = SimpleCharMap()
+    map = LazyCharMap()
   }
 
   @Test

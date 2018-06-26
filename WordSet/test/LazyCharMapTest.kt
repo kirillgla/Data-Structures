@@ -1,5 +1,9 @@
+
 import borsk.editorconfig.collections.CharMap
-import borsk.editorconfig.collections.SimpleCharMap
+import borsk.editorconfig.collections.CharMap.Companion.AllLetters
+import borsk.editorconfig.collections.CharMap.Companion.LettersCount
+import borsk.editorconfig.collections.LazyCharMap
+import borsk.editorconfig.collections.LazyCharMap.Companion.actualIndex
 import borsk.editorconfig.collections.UnsupportedCharacterException
 import org.junit.Before
 import org.junit.Test
@@ -8,12 +12,12 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-class SimpleCharMapTest {
+class LazyCharMapTest {
   private lateinit var map: CharMap<String>
 
   @Before
   fun initialize() {
-    map = SimpleCharMap()
+    map = LazyCharMap()
   }
 
   @Test
@@ -147,5 +151,19 @@ class SimpleCharMapTest {
     assertNull(zoe3)
     assertNull(mary3)
     assertNull(nina3)
+  }
+
+  @Test
+  fun testActualIndexReturnsValidIndices() {
+    val actual = (0 until LettersCount).toList()
+    val mapped = AllLetters.map(LazyCharMap.Companion::actualIndex)
+
+    assertEquals(actual, mapped)
+  }
+
+  @Test(expected = UnsupportedCharacterException::class)
+  fun testActualIndexThrowsOnInvalidChar() {
+    val invalidIndex = '%'
+    actualIndex(invalidIndex)
   }
 }

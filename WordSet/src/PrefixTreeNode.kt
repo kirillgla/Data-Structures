@@ -1,12 +1,12 @@
 package borsk.editorconfig.collections
 
-import borsk.editorconfig.collections.CharMap.Companion.allLetters
+import borsk.editorconfig.collections.CharMap.Companion.AllLetters
 import java.lang.IllegalArgumentException
 
 // node is left without explicit information
 // about the character it represents, if any
 internal class PrefixTreeNode internal constructor(
-  private val myChildren: CharMap<PrefixTreeNode> = SimpleCharMap(),
+  private val myChildren: CharMap<PrefixTreeNode> = LazyCharMap(),
   private var myData: String? = null
 ) {
 
@@ -21,7 +21,7 @@ internal class PrefixTreeNode internal constructor(
 
   fun clear() {
     myData = null
-    allLetters.forEach(myChildren::delete)
+    AllLetters.forEach(myChildren::delete)
   }
 
   /**
@@ -107,7 +107,7 @@ internal class PrefixTreeNode internal constructor(
     if (isWordEnd) {
       result += "data;"
     }
-    for (char in allLetters) {
+    for (char in AllLetters) {
       val child = myChildren[char]
       if (child != null) {
         result += char
