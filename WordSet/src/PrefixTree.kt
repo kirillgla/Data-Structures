@@ -1,22 +1,49 @@
 package borsk.editorconfig.collections
 
-// TODO: use sequences wherever possible
+import java.util.*
+
 class PrefixTree : MutableWordSet {
   private val myRoot = PrefixTreeNode()
-  // private var myModCount = 0
+  private var myModCount = 0
+
+  internal fun checkModCount(expectedModCount: Int) {
+    if (myModCount != expectedModCount) {
+      throw ConcurrentModificationException()
+    }
+  }
 
   override val size: Int
     get() = myRoot.subtreeSize
 
-  override fun containsPrefix(prefix: String): Boolean =
-    myRoot.customSearch(prefix, 0) { true }
+  override fun containsPrefix(prefix: String): Boolean {
+    return try {
+      myRoot.customSearch(prefix) { true }
+    } catch (exception: UnsupportedCharacterException) {
+      false
+    }
+  }
 
-  override fun getAllWithPrefix(prefix: String): Sequence<String> =
-  // ArrayList<String>().also { list -> myRoot.customSearch(prefix, 0) { node -> node.getAllData(list) } }
-    TODO("return a lazy iterator and rewrite the method in more efficient way")
+  override fun getContinuationSequence(prefix: String): Sequence<String> {
+    var result: Sequence<String>? = null
+    val found = myRoot.customSearch(prefix) { result = it.getDataSequence(myModCount, this); true }
+    assert((result != null) == found)
+    return result ?: emptySequence()
+  }
 
-  override fun contains(element: String): Boolean =
-    myRoot.customSearch(element, 0, PrefixTreeNode::isWordEnd)
+  override fun getContinuationIterable(prefix: String): Iterable<String> {
+    var result: Iterable<String>? = null
+    val found = myRoot.customSearch(prefix) { result = it.getDataList(); true }
+    assert((result != null) == found)
+    return result ?: emptyList()
+  }
+
+  override fun contains(element: String): Boolean {
+    return try {
+      myRoot.customSearch(element, 0, PrefixTreeNode::isWordEnd)
+    } catch (exception: UnsupportedCharacterException) {
+      false
+    }
+  }
 
   override fun containsAll(elements: Collection<String>): Boolean =
     elements.all(this::contains) // No need for using sequences
@@ -24,20 +51,47 @@ class PrefixTree : MutableWordSet {
   override fun isEmpty(): Boolean =
     myRoot.isEmpty()
 
-  override fun add(element: String): Boolean =
-    myRoot.insert(element)
+  override fun add(element: String): Boolean {
+    val result = myRoot.insert(element)
+    if (result) {
+      myModCount += 1
+    }
 
+    return result
+  }
+
+  // Note: using .asSequence() might improve performance
   override fun addAll(elements: Collection<String>): Boolean =
-    elements.asSequence().map(this::add).fold(false) { acc, element -> acc or element }
+    elements.map(this::add).fold(false) { acc, element -> acc or element }
 
-  override fun remove(element: String): Boolean =
-    myRoot.remove(element)
+  override fun remove(element: String): Boolean {
+    val result = try {
+      myRoot.remove(element)
+    } catch (exception: UnsupportedCharacterException) {
+      false
+    }
+    if (result) {
+      myModCount += 1
+    }
 
+    return result
+  }
+
+  // Note: using .asSequence() might improve performance
   override fun removeAll(elements: Collection<String>): Boolean =
-    elements.asSequence().map(this::remove).fold(false) { acc, element -> acc or element }
+    elements.map(this::remove).fold(false) { acc, element -> acc or element }
 
   override fun retainAll(elements: Collection<String>): Boolean {
-    TODO("not implemented")
+    var result = false
+    val iterator = iterator()
+    while (iterator.hasNext()) {
+      val data = iterator.next()
+      if (data !in elements) {
+        iterator.remove()
+        result = true
+      }
+    }
+    return result
   }
 
   override fun clear() =

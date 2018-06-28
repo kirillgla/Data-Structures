@@ -33,7 +33,7 @@ internal interface CharMap<E> : Iterable<E> {
     const val Underscore = '_'
     const val Dash = '-'
 
-    val AllLetters = ArrayList<Char>().apply {
+    val AllLetters: List<Char> = ArrayList<Char>().apply {
       add(Dash)
       addAll(Digits)
       addAll(UppercaseLetters)

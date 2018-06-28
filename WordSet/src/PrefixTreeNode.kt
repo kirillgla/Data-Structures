@@ -2,14 +2,15 @@ package borsk.editorconfig.collections
 
 import borsk.editorconfig.collections.CharMap.Companion.AllLetters
 import java.lang.IllegalArgumentException
+import kotlin.coroutines.experimental.buildSequence
 
 // node is left without explicit information
 // about the character it represents, if any
-internal class PrefixTreeNode internal constructor(data: String? = null) {
+internal class PrefixTreeNode {
 
-  private val myChildren: CharMap<PrefixTreeNode> = LazyCharMap()
+  internal val myChildren: CharMap<PrefixTreeNode> = LazyCharMap()
 
-  private var myData: String? = data
+  var data: String? = null
     set(value) {
       if (field == null && value != null) {
         subtreeSize += 1
@@ -20,9 +21,9 @@ internal class PrefixTreeNode internal constructor(data: String? = null) {
     }
 
   val isWordEnd
-    get() = myData != null
+    get() = data != null
 
-  var subtreeSize: Int = if (data == null) 0 else 1
+  var subtreeSize: Int = 0
     private set
 
   internal val actualSubtreeSize
@@ -32,7 +33,7 @@ internal class PrefixTreeNode internal constructor(data: String? = null) {
     subtreeSize == 0
 
   fun clear() {
-    myData = null
+    data = null
     myChildren.clear()
     subtreeSize = 0
   }
@@ -43,7 +44,7 @@ internal class PrefixTreeNode internal constructor(data: String? = null) {
    * if search succeeds, executes requested action and returns it's result;
    * otherwise return false
    */
-  fun customSearch(string: String, next: Int, onStringEnd: (PrefixTreeNode) -> Boolean): Boolean {
+  fun customSearch(string: String, next: Int = 0, onStringEnd: (PrefixTreeNode) -> Boolean): Boolean {
     return when (next) {
       string.length ->
         onStringEnd(this)
@@ -63,8 +64,8 @@ internal class PrefixTreeNode internal constructor(data: String? = null) {
   fun insert(string: String, next: Int = 0): Boolean {
     return when (next) {
       string.length -> {
-        if (myData == null) {
-          myData = string
+        if (data == null) {
+          data = string
           true
         } else {
           false
@@ -93,7 +94,7 @@ internal class PrefixTreeNode internal constructor(data: String? = null) {
    */
   fun remove(string: String, next: Int = 0): Boolean {
     when (next) {
-      string.length -> return myData?.let { myData = null; true } ?: false
+      string.length -> return data?.let { data = null; true } ?: false
 
       in 0 until string.length -> {
         val nextChar = string[next]
@@ -110,6 +111,24 @@ internal class PrefixTreeNode internal constructor(data: String? = null) {
 
       else -> throw IllegalArgumentException("next")
     }
+  }
+
+  fun getDataSequence(expectedModCount: Int, tree: PrefixTree): Sequence<String> {
+    tree.checkModCount(expectedModCount)
+    return buildSequence {
+      data?.let { yield(it) }
+      myChildren.forEach {
+        yieldAll(it.getDataSequence(expectedModCount, tree))
+      }
+    }
+  }
+
+  fun getDataList(): List<String> =
+    ArrayList<String>(subtreeSize).also(this::getDataList)
+
+  private fun getDataList(list: MutableList<String>) {
+    data?.let(list::add)
+    myChildren.forEach { it.getDataList(list) }
   }
 
   /**

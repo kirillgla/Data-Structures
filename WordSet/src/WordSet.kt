@@ -11,8 +11,12 @@ interface WordSet : Set<String> {
   fun containsPrefix(prefix: String): Boolean
 
   /**
-   * Acquires all strings in [WordSet] that start with [prefix].
-   * Some implementations may not be lazy
+   * Lazily acquires all strings in [WordSet] that start with [prefix]
    */
-  fun getAllWithPrefix(prefix: String): Sequence<String>
+  fun getContinuationSequence(prefix: String): Sequence<String>
+
+  /**
+   * Eagerly acquires all strings in [WordSet] that start with [prefix]
+   */
+  fun  getContinuationIterable(prefix: String): Iterable<String>
 }
