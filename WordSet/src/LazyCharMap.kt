@@ -87,6 +87,7 @@ internal class LazyCharMap<E>(supplier: (Int) -> Array<E?>) : CharMap<E> {
       if (!map.myValuesDelegate.isInitialized() || currentIndex >= LettersCount) {
         return null
       }
+
       for (index in currentIndex + 1 until LettersCount) {
         if (map.myValues[index] != null) {
           return index

@@ -22,7 +22,7 @@ internal interface CharMap<E> : Iterable<E> {
     private const val LastLowercase = 'z'
     val LowercaseLetters = FirstLowercase..LastLowercase
 
-    const val NumberOfLowercaseLetters = LastLowercase - FirstLowercase + 1
+    // const val NumberOfLowercaseLetters = LastLowercase - FirstLowercase + 1
 
     const val FirstDigit = '0'
     private const val LastDigit = '9'

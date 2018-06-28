@@ -102,11 +102,11 @@ class PrefixTreeNodeTest {
   fun `test that removing value also remove associated node`() {
     val node = PrefixTreeNode()
 
-    val empty1 = node.myChildren.none()
+    val empty1 = node.children.none()
     val inserted = node.insert("Zoe")
-    val empty2 = node.myChildren.none()
+    val empty2 = node.children.none()
     val removed = node.remove("Zoe")
-    val empty3 = node.myChildren.none()
+    val empty3 = node.children.none()
 
     assertTrue(empty1)
     assertTrue(inserted)

@@ -15,12 +15,10 @@ class PrefixTree : MutableWordSet {
   override val size: Int
     get() = myRoot.subtreeSize
 
-  override fun containsPrefix(prefix: String): Boolean {
-    return try {
-      myRoot.customSearch(prefix) { true }
-    } catch (exception: UnsupportedCharacterException) {
-      false
-    }
+  override fun containsPrefix(prefix: String) = try {
+    myRoot.customSearch(prefix) { true }
+  } catch (exception: UnsupportedCharacterException) {
+    false
   }
 
   override fun getContinuationSequence(prefix: String): Sequence<String> {
@@ -37,16 +35,14 @@ class PrefixTree : MutableWordSet {
     return result ?: emptyList()
   }
 
-  override fun contains(element: String): Boolean {
-    return try {
-      myRoot.customSearch(element, 0, PrefixTreeNode::isWordEnd)
-    } catch (exception: UnsupportedCharacterException) {
-      false
-    }
+  override fun contains(element: String) = try {
+    myRoot.customSearch(element, 0, PrefixTreeNode::isWordEnd)
+  } catch (exception: UnsupportedCharacterException) {
+    false
   }
 
   override fun containsAll(elements: Collection<String>): Boolean =
-    elements.all(this::contains) // No need for using sequences
+    elements.all(this::contains)
 
   override fun isEmpty(): Boolean =
     myRoot.isEmpty()

@@ -5,8 +5,8 @@ import borsk.editorconfig.collections.PrefixTree
 import borsk.editorconfig.collections.TreeWordSet
 import java.util.*
 
-const val Size = 100000
-const val MaxWordLength = 50
+const val Size = 10
+const val MaxWordLength = 5
 const val MaxSearchWordLength = MaxWordLength / 2
 
 val random = Random()
@@ -37,15 +37,13 @@ fun getRandomChar(): Char {
 }
 
 fun main(args: Array<String>) {
-  benchmark(
-    actionsPerIteration = 1,
-    warmUpIterations = 8,
-    testIterations = 20,
-    actions = *arrayOf(
-      ::getContinuationSequenceInPrefixTree,
-      ::getContinuationSequenceInTreeWordSet
-    )
-  )
+  val numbers = (1..100).toList()
+
+  val list = numbers
+    .filter { it % 16 == 0 }
+    .also(::println)
+    .map { "0x" + it.toString(16) }
+    .forEach(::println)
 }
 
 /* Winners in:
